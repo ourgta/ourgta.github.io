@@ -3,3 +3,17 @@
 * {
   font-family: "JetBrains Mono", monospace;
 }
+
+body {
+  background-color: #1e1e1e;
+  color: #d4d4d4;
+}
+
+a {
+  color: #9cdcfe;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
