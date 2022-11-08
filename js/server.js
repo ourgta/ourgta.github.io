@@ -17,7 +17,9 @@
   const list = document.getElementById("players");
 
   for (const player of data.included.sort((a, b) =>
-    a.attributes.name > b.attributes.name ? 1 : -1
+    a.attributes.name.localeCompare(b.attributes.name, undefined, {
+      sensitivity: "base",
+    })
   )) {
     const anchor = document.createElement("a");
     anchor.href = `/player.html?pid=${player.attributes.id}`;
