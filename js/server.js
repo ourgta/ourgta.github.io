@@ -1,7 +1,5 @@
 (async () => {
-  const hidden = [
-    "8e3c8b352f842f8e77b3c32ba1262ad45926bfc8dcf9e19b3d037150db526803",
-  ];
+  const hidden = (await (await fetch("/config.json")).json()).hidden;
 
   const params = new URLSearchParams(document.location.search);
   const sid = params.get("sid");
