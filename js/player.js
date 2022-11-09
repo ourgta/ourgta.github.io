@@ -1,7 +1,4 @@
 (async () => {
-  const hello = "Hello world!";
-  console.log(hello);
-
   const params = new URLSearchParams(document.location.search);
   const pid = params.get("pid");
 

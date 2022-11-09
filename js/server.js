@@ -1,6 +1,7 @@
 (async () => {
-  const hello = "Hello world!";
-  console.log(hello);
+  const hidden = [
+    "8e3c8b352f842f8e77b3c32ba1262ad45926bfc8dcf9e19b3d037150db526803",
+  ];
 
   const params = new URLSearchParams(document.location.search);
   const sid = params.get("sid");
@@ -21,6 +22,12 @@
       sensitivity: "base",
     })
   )) {
+    const shaObj = new jsSHA("SHA-256", "TEXT", { encoding: "UTF8" });
+    shaObj.update(player.attributes.id);
+    if (hidden.includes(shaObj.getHash("HEX"))) {
+      continue;
+    }
+
     const anchor = document.createElement("a");
     anchor.href = `/player.html?pid=${player.attributes.id}`;
     anchor.appendChild(document.createTextNode(player.attributes.name));
