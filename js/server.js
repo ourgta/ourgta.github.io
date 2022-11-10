@@ -13,6 +13,9 @@
   );
   const data = await response.json();
 
+  const loading = document.getElementById("loading");
+  loading.style.display = "none";
+
   const list = document.getElementById("players");
 
   for (const player of data.included.sort((a, b) =>

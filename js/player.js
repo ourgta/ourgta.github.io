@@ -20,6 +20,9 @@
   );
   const data = await response.json();
 
+  const loading = document.getElementById("loading");
+  loading.style.display = "none";
+
   const list = document.getElementById("names");
 
   for (const id of data.included) {
