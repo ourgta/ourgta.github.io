@@ -4,25 +4,28 @@
 
   if (!sid) return;
 
+  const stop = new Date();
+  const start = new Date(stop.getTime() - 30 * 60 * 1000);
+
+  const [current, recent] = await Promise.all([
+    fetch(`https://api.battlemetrics.com/servers/${sid}?include=player`),
+    fetch(
+      `https://api.battlemetrics.com/servers/${sid}/relationships/sessions?start=${start.toISOString()}&stop=${stop.toISOString()}`
+    ),
+  ]);
+
   const players = new Array();
 
   for (const {
     attributes: { name },
     attributes: { id: pid },
-  } of (
-    await (
-      await fetch(`https://api.battlemetrics.com/servers/${sid}?include=player`)
-    ).json()
-  ).included) {
+  } of (await current.json()).included) {
     players.push({
       name,
       pid: pid,
       online: true,
     });
   }
-
-  const stop = new Date();
-  const start = new Date(stop.getTime() - 30 * 60 * 1000);
 
   for (const {
     attributes: { name },
@@ -31,13 +34,7 @@
         data: { id: pid },
       },
     },
-  } of (
-    await (
-      await fetch(
-        `https://api.battlemetrics.com/servers/${sid}/relationships/sessions?start=${start.toISOString()}&stop=${stop.toISOString()}`
-      )
-    ).json()
-  ).data) {
+  } of (await recent.json()).data) {
     if (players.find((e) => e.pid === pid)) continue;
 
     players.push({
