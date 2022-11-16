@@ -2,32 +2,36 @@
   const params = new URLSearchParams(document.location.search);
   const pid = params.get("pid");
 
-  if (!pid) {
-    return;
-  }
+  if (!pid) return;
 
   const hidden = (await (await fetch("/config.json")).json()).hidden;
 
-  const shaObj = new jsSHA("SHA-256", "TEXT", { encoding: "UTF8" });
-  shaObj.update(pid);
-  if (hidden.includes(shaObj.getHash("HEX"))) {
+  if (
+    hidden.includes(
+      new jsSHA("SHA-256", "TEXT", { encoding: "UTF8" })
+        .update(pid)
+        .getHash("HEX")
+    )
+  ) {
     location.href = "https://youtu.be/dQw4w9WgXcQ";
     return;
   }
 
-  const response = await fetch(
-    `https://api.battlemetrics.com/players/${pid}?include=identifier`
-  );
-  const data = await response.json();
-
-  const loading = document.getElementById("loading");
-  loading.style.display = "none";
-
   const list = document.getElementById("names");
 
-  for (const id of data.included) {
+  for (const {
+    attributes: { identifier },
+  } of (
+    await (
+      await fetch(
+        `https://api.battlemetrics.com/players/${pid}?include=identifier`
+      )
+    ).json()
+  ).included) {
     const listItem = document.createElement("li");
-    listItem.appendChild(document.createTextNode(id.attributes.identifier));
+    listItem.appendChild(document.createTextNode(identifier));
     list.appendChild(listItem);
   }
+
+  document.getElementById("loading").style.display = "none";
 })();

@@ -1,40 +1,79 @@
 (async () => {
-  const hidden = (await (await fetch("/config.json")).json()).hidden;
-
   const params = new URLSearchParams(document.location.search);
   const sid = params.get("sid");
 
-  if (!sid) {
-    return;
+  if (!sid) return;
+
+  const players = new Array();
+
+  for (const {
+    attributes: { name },
+    attributes: { id: pid },
+  } of (
+    await (
+      await fetch(`https://api.battlemetrics.com/servers/${sid}?include=player`)
+    ).json()
+  ).included) {
+    players.push({
+      name,
+      pid: pid,
+      online: true,
+    });
   }
 
-  const response = await fetch(
-    `https://api.battlemetrics.com/servers/${sid}?include=player`
-  );
-  const data = await response.json();
+  const stop = new Date();
+  const start = new Date(stop.getTime() - 30 * 60 * 1000);
 
-  const loading = document.getElementById("loading");
-  loading.style.display = "none";
+  for (const {
+    attributes: { name },
+    relationships: {
+      player: {
+        data: { id: pid },
+      },
+    },
+  } of (
+    await (
+      await fetch(
+        `https://api.battlemetrics.com/servers/${sid}/relationships/sessions?start=${start.toISOString()}&stop=${stop.toISOString()}`
+      )
+    ).json()
+  ).data) {
+    if (players.find((e) => e.pid === pid)) continue;
 
+    players.push({
+      name,
+      pid: pid,
+      online: false,
+    });
+  }
+
+  const hidden = (await (await fetch("/config.json")).json()).hidden;
   const list = document.getElementById("players");
 
-  for (const player of data.included.sort((a, b) =>
-    a.attributes.name.localeCompare(b.attributes.name, undefined, {
+  for (const player of players.sort((a, b) =>
+    a.name.localeCompare(b.name, undefined, {
       sensitivity: "base",
     })
   )) {
-    const shaObj = new jsSHA("SHA-256", "TEXT", { encoding: "UTF8" });
-    shaObj.update(player.attributes.id);
-    if (hidden.includes(shaObj.getHash("HEX"))) {
+    if (
+      hidden.includes(
+        new jsSHA("SHA-256", "TEXT", { encoding: "UTF8" })
+          .update(player.pid)
+          .getHash("HEX")
+      )
+    )
       continue;
-    }
 
     const anchor = document.createElement("a");
-    anchor.href = `/player.html?pid=${player.attributes.id}`;
-    anchor.appendChild(document.createTextNode(player.attributes.name));
+    anchor.href = `/player.html?pid=${player.pid}`;
+    anchor.appendChild(document.createTextNode(player.name));
+
+    if (!player.online) anchor.classList.add("offline");
 
     const listItem = document.createElement("li");
     listItem.appendChild(anchor);
     list.appendChild(listItem);
   }
+
+  document.getElementById("loading").style.display = "none";
 })();

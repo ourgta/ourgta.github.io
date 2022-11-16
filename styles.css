@@ -7,8 +7,12 @@ body {
 }
 
 a {
-  color: #9cdcfe;
+  color: #4fc1ff;
   text-decoration: none;
+}
+
+a.offline {
+  opacity: 0.667;
 }
 
 a:hover {
