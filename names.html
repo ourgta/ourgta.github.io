@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ourgta_names</title>
+
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <a href="/index"><h1>home</h1></a>
+
+    <h2><a id="logs">logs</a></h2>
+
+    <h2>names</h2>
+    <img
+      src="/img/spinner-solid.svg"
+      id="loading"
+      class="rotate"
+      width="64"
+      height="64"
+      alt=""
+    />
+    <ul id="names"></ul>
+
+    <script src="/js/common.js" defer></script>
+    <script defer>
+      (async () => {
+        const params = new URLSearchParams(document.location.search);
+        const pid = params.get("pid");
+
+        if (!pid) return;
+
+        document.getElementById("logs").href = `/logs?pid=${pid}`;
+
+        const list = document.getElementById("names");
+
+        const response = await fetch(
+          `https://glassfrog.duckdns.org/names?pid=${encodeURIComponent(pid)}`
+        );
+
+        if (response.status === 429) {
+          rateLimit(response.headers);
+          return;
+        }
+
+        let title;
+        for (const name of await response.json()) {
+          if (title === undefined) title = name;
+
+          const listItem = document.createElement("li");
+          listItem.appendChild(document.createTextNode(name));
+          list.appendChild(listItem);
+        }
+
+        if (title !== undefined) document.title = title;
+
+        document.getElementById("loading").style.display = "none";
+      })();
+    </script>
+  </body>
+</html>
