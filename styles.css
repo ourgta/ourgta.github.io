@@ -1,14 +1,6 @@
-@font-face {
-  font-family: "Comic Mono";
-  font-weight: 400;
-  src: local("Comic Mono"), url(/ttf/ComicMono.ttf);
-}
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap');
 
-@font-face {
-  font-family: "Comic Mono";
-  font-weight: 700;
-  src: local("Comic Mono"), url(/ttf/ComicMono-Bold.ttf);
-}
+font-family: 'JetBrains Mono', monospace;
 
 body {
   font-family: "Comic Mono", monospace;
