@@ -4,29 +4,30 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ourgta_index</title>
-
-    <link rel="stylesheet" href="/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@next/css/pico.min.css"
+    />
+    <title>Index - ourgta</title>
   </head>
   <body>
-    <a href="/index"><h1>home</h1></a>
+    <main class="container">
+      <a href="/"><h1>Index</h1></a>
 
-    <h2>find</h2>
+      <form action="/find.html" role="group">
+        <input type="text" name="name" placeholder="Enter player name" />
+        <input type="submit" value="Search" />
+      </form>
 
-    <form action="/find">
-      <input type="text" name="name" placeholder="name" />
-    </form>
-
-    <h2>recent_players</h2>
-    <img
-      src="/img/spinner-solid.svg"
-      id="loading"
-      class="rotate"
-      width="64"
-      height="64"
-      alt=""
-    />
-    <ul id="players"></ul>
+      <table id="table" aria-busy="true">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </main>
 
     <script src="/js/common.js" defer></script>
     <script defer>
@@ -40,24 +41,27 @@
 
         const players = await response.json();
 
-        const list = document.getElementById("players");
+        const tableBody = document.getElementById("tableBody");
         for (const player of players.sort((a, b) =>
           a.name.localeCompare(b.name, undefined, {
             sensitivity: "base",
           })
         )) {
           const anchor = document.createElement("a");
-          anchor.href = `/names?pid=${player.pid}`;
+          anchor.setAttribute("href", `/names.html?pid=` + player.pid);
           anchor.appendChild(document.createTextNode(player.name));
 
-          if (!player.online) anchor.classList.add("offline");
+          if (!player.online) anchor.classList.add("secondary");
 
-          const listItem = document.createElement("li");
-          listItem.appendChild(anchor);
-          list.appendChild(listItem);
+          const tableRow = document.createElement("tr");
+          const tableHeader = document.createElement("th");
+          tableHeader.setAttribute("scope", "row");
+          tableHeader.appendChild(anchor);
+          tableRow.appendChild(tableHeader);
+          tableBody.appendChild(tableRow);
         }
 
-        document.getElementById("loading").style.display = "none";
+        document.getElementById("table").setAttribute("aria-busy", "false");
       })();
     </script>
   </body>

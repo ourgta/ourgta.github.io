@@ -4,35 +4,44 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@next/css/pico.min.css"
+    />
     <title>ourgta_names</title>
-
-    <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
-    <a href="/index"><h1>home</h1></a>
+    <main class="container">
+      <a href="/"><h1>Index</h1></a>
 
-    <h2><a id="logs">logs</a></h2>
+      <div class="grid">
+        <a role="button" disabled>Names</a>
+        <a id="logs" role="button">Logs</a>
+      </div>
 
-    <h2>names</h2>
-    <img
-      src="/img/spinner-solid.svg"
-      id="loading"
-      class="rotate"
-      width="64"
-      height="64"
-      alt=""
-    />
-    <ul id="names"></ul>
+      <table id="table" aria-busy="true">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </main>
 
     <script src="/js/common.js" defer></script>
     <script defer>
       (async () => {
         const params = new URLSearchParams(document.location.search);
         const pid = params.get("pid");
+        if (!pid) {
+          document.getElementById("table").setAttribute("aria-busy", "false");
+          return;
+        }
 
-        if (!pid) return;
-
-        document.getElementById("logs").href = `/logs?pid=${pid}`;
+        document
+          .getElementById("logs")
+          .setAttribute("href", `/logs.html?pid=${pid}`);
 
         const list = document.getElementById("names");
 
@@ -40,23 +49,22 @@
           `https://glassfrog.duckdns.org/names?pid=${encodeURIComponent(pid)}`
         );
 
-        if (response.status === 429) {
-          rateLimit(response.headers);
-          return;
-        }
-
         let title;
+        const tableBody = document.getElementById("tableBody");
         for (const name of await response.json()) {
           if (title === undefined) title = name;
 
-          const listItem = document.createElement("li");
-          listItem.appendChild(document.createTextNode(name));
-          list.appendChild(listItem);
+          const tableRow = document.createElement("tr");
+          const tableHeader = document.createElement("th");
+          tableHeader.setAttribute("scope", "row");
+          tableHeader.appendChild(document.createTextNode(name));
+          tableRow.appendChild(tableHeader);
+          tableBody.appendChild(tableRow);
         }
 
-        if (title !== undefined) document.title = title;
+        if (title !== undefined) document.title = title + " - ourgta";
 
-        document.getElementById("loading").style.display = "none";
+        document.getElementById("table").setAttribute("aria-busy", "false");
       })();
     </script>
   </body>

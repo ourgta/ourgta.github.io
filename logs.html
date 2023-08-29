@@ -4,110 +4,102 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@next/css/pico.min.css"
+    />
     <title>ourgta_logs</title>
-
-    <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
-    <a href="/index"><h1>home</h1></a>
+    <main class="container">
+      <a href="/"><h1>Index</h1></a>
 
-    <h2>find</h2>
+      <div class="grid">
+        <a id="names" role="button">Names</a>
+        <a role="button" disabled>Logs</a>
+      </div>
 
-    <form action="/find">
-      <input type="text" name="name" placeholder="name" />
-    </form>
+      <table id="table" aria-busy="true">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Server</th>
+            <th scope="col">Joined</th>
+            <th scope="col">Left</th>
+            <th scope="col">Length</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
 
-    <h2><a id="names">names</a></h2>
-
-    <h2>logs</h2>
-
-    <img
-      style="display: none"
-      src="/img/spinner-solid.svg"
-      id="loading"
-      class="rotate"
-      width="64"
-      height="64"
-      alt=""
-    />
-
-    <table id="logstable" style="display: none">
-      <tr>
-        <th>name</th>
-        <th>server</th>
-        <th>joined</th>
-        <th>left</th>
-        <th>length</th>
-      </tr>
-    </table>
-
-    <a id="previous" class="offline">previous_page</a>
-    <a id="next" class="offline">next_page</a>
+      <div class="grid">
+        <a id="previousButton" role="button" disabled>Previous page</a>
+        <a id="nextButton" role="button" disabled>Next page</a>
+      </div>
+    </main>
 
     <script src="/js/common.js" defer></script>
     <script defer>
       (async () => {
         const params = new URLSearchParams(document.location.search);
         const pid = parseInt(params.get("pid"));
-        if (!pid) return;
+        if (!pid) {
+          document.getElementById("table").setAttribute("aria-busy", "false");
+          return;
+        }
 
-        document.getElementById("names").href = `/names?pid=${pid}`;
         const page = parseInt(params.get("page")) || 1;
 
-        document.getElementById("loading").style.display = "block";
+        document
+          .getElementById("names")
+          .setAttribute("href", `/names.html?pid=${pid}`);
+
         const response = await fetch(
           `https://glassfrog.duckdns.org/logs?pid=${pid}&page=${page}`
         );
 
-        if (response.status === 429) {
-          rateLimit(response.headers);
-          return;
-        }
-
         const data = await response.json();
-        document.getElementById("loading").style.display = "none";
-
-        if (!data.rows.length) {
-          const header = document.createElement("p");
-          header.innerText = "No results 😱";
-          document.body.appendChild(header);
-          return;
-        }
 
         let title;
-        const table = document.getElementById("logstable");
+        const tableBody = document.getElementById("tableBody");
         for (const { name, sid, add, remove } of data.rows) {
           if (title === undefined) title = name;
 
-          const row = table.insertRow(-1);
-          row.insertCell(-1).innerText = name;
-          row.insertCell(-1).innerText = { 19736: "life", 397528: "events" }[
-            sid
-          ];
-          row.insertCell(-1).innerText = parseDate(add) || "";
-          row.insertCell(-1).innerText = parseDate(remove);
-          if (!add || !remove) continue;
-          row.insertCell(-1).innerText = timeBetween(
-            new Date(add),
-            new Date(remove)
-          );
+          const tableRow = document.createElement("tr");
+          const tableHeader = document.createElement("th");
+          tableHeader.setAttribute("scope", "row");
+          tableHeader.appendChild(document.createTextNode(name));
+          tableRow.appendChild(tableHeader);
+
+          for (textNode of [
+            { 19736: "Life", 397528: "Events" }[sid],
+            parseDate(add) || "",
+            parseDate(remove),
+            add && remove ? timeBetween(new Date(add), new Date(remove)) : "",
+          ]) {
+            const tableData = document.createElement("td");
+            tableData.appendChild(document.createTextNode(textNode));
+            tableRow.appendChild(tableData);
+          }
+
+          tableBody.appendChild(tableRow);
         }
 
-        if (title !== undefined) document.title = title;
-
-        document.getElementById("logstable").style.display = null;
+        if (title !== undefined) document.title = title + " - ourgta";
 
         if (page > 1) {
-          const anchor = document.getElementById("previous");
-          anchor.href = `/logs?pid=${pid}&page=${page - 1}`;
-          anchor.classList.remove("offline");
+          const anchor = document.getElementById("previousButton");
+          anchor.setAttribute("href", `/logs.html?pid=${pid}&page=${page - 1}`);
+          anchor.removeAttribute("disabled");
         }
 
         if (data.next) {
-          const anchor = document.getElementById("next");
-          anchor.href = `/logs?pid=${pid}&page=${page + 1}`;
-          anchor.classList.remove("offline");
+          const anchor = document.getElementById("nextButton");
+          anchor.setAttribute("href", `/logs.html?pid=${pid}&page=${page + 1}`);
+          anchor.removeAttribute("disabled");
         }
+
+        document.getElementById("table").setAttribute("aria-busy", "false");
       })();
     </script>
   </body>

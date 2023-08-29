@@ -17,14 +17,3 @@ function timeBetween(start, end) {
     seconds.toString().padStart(2, "0"),
   ].join(":");
 }
-
-function rateLimit(headers) {
-  const url = new URL("rate-limit.html", window.location.href);
-  url.searchParams.set("url", window.location.href);
-  url.searchParams.set(
-    "date",
-    new Date(new Date().getTime() + headers.get("ratelimit-reset") * 1000)
-  );
-  window.location.href = url;
-  return;
-}
