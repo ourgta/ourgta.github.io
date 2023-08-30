@@ -53,7 +53,10 @@
           anchor.setAttribute("href", `/names.html?pid=` + player.pid);
           anchor.appendChild(document.createTextNode(player.name));
 
-          if (!player.online) anchor.classList.add("secondary");
+          if (!player.online) {
+            anchor.classList.add("secondary");
+            anchor.setAttribute("data-tooltip", "Offline");
+          }
 
           const tableRow = document.createElement("tr");
           const tableHeader = document.createElement("th");
