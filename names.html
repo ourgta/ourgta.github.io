@@ -24,6 +24,7 @@
           <thead>
             <tr>
               <th scope="col">Name</th>
+              <th scope="col">Last seen</th>
             </tr>
           </thead>
           <tbody id="tableBody"></tbody>
@@ -53,7 +54,7 @@
 
         let title;
         const tableBody = document.getElementById("tableBody");
-        for (const name of await response.json()) {
+        for (const { name, lastSeen } of await response.json()) {
           if (title === undefined) title = name;
 
           const tableRow = document.createElement("tr");
@@ -61,6 +62,11 @@
           tableHeader.setAttribute("scope", "row");
           tableHeader.appendChild(document.createTextNode(name));
           tableRow.appendChild(tableHeader);
+
+          const tableData = document.createElement("td");
+          tableData.appendChild(document.createTextNode(parseDate(lastSeen)));
+          tableRow.appendChild(tableData);
+
           tableBody.appendChild(tableRow);
         }
 
