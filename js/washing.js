@@ -3,10 +3,10 @@ function index() {
 
   if (isNaN(weight)) return;
 
-  const powder = document.getElementById("powder").value | 50;
-  const powderWeight = document.getElementById("powderWeight").value | 65;
-  const powderVolume = document.getElementById("powderVolume").value | 97;
-  const powderLoad = document.getElementById("powderLoad").value | 5;
+  const powder = document.getElementById("powder").value || 50;
+  const powderWeight = document.getElementById("powderWeight").value || 65;
+  const powderVolume = document.getElementById("powderVolume").value || 97;
+  const powderLoad = document.getElementById("powderLoad").value || 5;
 
   if (isNaN(powder)) return;
   if (isNaN(powderWeight)) return;
