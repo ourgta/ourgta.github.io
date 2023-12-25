@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Washing</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css"
+    />
+  </head>
+  <body>
+    <main class="container">
+      <label>
+        Load weight in kilograms
+        <input type="number" id="weight" onchange="index()" />
+      </label>
+
+      <details>
+        <summary>Adjust formula</summary>
+
+        <label>
+          Load powder volume in milliliters
+          <input
+            type="number"
+            id="powder"
+            onchange="index()"
+            placeholder="50"
+          />
+        </label>
+
+        <label>
+          Powder weight in grams
+          <input
+            type="number"
+            id="powderWeight"
+            onchange="index()"
+            placeholder="65"
+          />
+        </label>
+
+        <label>
+          Powder volume in milliliters
+          <input
+            type="number"
+            id="powderVolume"
+            onchange="index()"
+            placeholder="97"
+          />
+        </label>
+
+        <label>
+          Powder load weight in kilograms
+          <input
+            type="number"
+            id="powderLoad"
+            onchange="index()"
+            placeholder="5"
+          />
+        </label>
+      </details>
+
+      <label>
+        Powder weight in grams
+        <input type="text" id="grams" />
+      </label>
+    </main>
+
+    <script src="/js/washing.js"></script>
+  </body>
+</html>
