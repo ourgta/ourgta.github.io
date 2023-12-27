@@ -7,63 +7,73 @@
 
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@next/css/pico.min.css"
     />
   </head>
   <body>
     <main class="container">
       <label>
-        Load weight in kilograms
-        <input type="number" id="weight" onchange="index()" />
+        Load
+        <form role="group">
+          <input id="weight" oninput="index()" />
+          <button disabled>kg</button>
+        </form>
       </label>
 
       <details>
-        <summary>Adjust formula</summary>
+        <summary role="button" class="outline secondary">
+          Adjust default load
+        </summary>
 
         <label>
-          Load powder volume in milliliters
-          <input
-            type="number"
-            id="powder"
-            onchange="index()"
-            placeholder="50"
-          />
+          Powder
+          <form role="group">
+            <input id="powder" oninput="index()" placeholder="50" />
+            <button disabled>ml</button>
+          </form>
         </label>
 
         <label>
-          Powder weight in grams
-          <input
-            type="number"
-            id="powderWeight"
-            onchange="index()"
-            placeholder="65"
-          />
+          Powder ratio
+          <div class="grid">
+            <form role="group">
+              <input id="powderWeight" oninput="index()" placeholder="65" />
+              <button disabled>g</button>
+            </form>
+
+            <form role="group">
+              <input id="powderVolume" oninput="index()" placeholder="97" />
+              <button disabled>ml</button>
+            </form>
+          </div>
         </label>
 
-        <label>
-          Powder volume in milliliters
-          <input
-            type="number"
-            id="powderVolume"
-            onchange="index()"
-            placeholder="97"
-          />
-        </label>
+        <label>Load range</label>
+        <div class="grid">
+          <label>
+            Minimum
+            <form role="group">
+              <input id="powderMinimumLoad" oninput="index()" placeholder="4" />
+              <button disabled>kg</button>
+            </form>
+          </label>
 
-        <label>
-          Powder load weight in kilograms
-          <input
-            type="number"
-            id="powderLoad"
-            onchange="index()"
-            placeholder="5"
-          />
-        </label>
+          <label>
+            Maximum
+            <form role="group">
+              <input id="powderMaximumLoad" oninput="index()" placeholder="6" />
+              <button disabled>kg</button>
+            </form>
+          </label>
+        </div>
       </details>
 
       <label>
-        Powder weight in grams
-        <input type="text" id="grams" />
+        Powder
+        <form role="group">
+          <input type="text" id="grams" readonly />
+          <button disabled>g</button>
+        </form>
       </label>
     </main>
 
