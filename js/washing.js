@@ -1,7 +1,11 @@
 function index() {
-  const weight = document.getElementById("weight").value;
+  let weight = document.getElementById("weight").value;
 
   if (isNaN(weight)) return;
+
+  const weightUnit = document.getElementById("weightUnit").value;
+
+  if (weightUnit === "lb") weight *= 0.45359237;
 
   const powder = document.getElementById("powder").value || 50;
   const powderWeight = document.getElementById("powderWeight").value || 65;

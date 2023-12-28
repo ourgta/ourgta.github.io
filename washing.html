@@ -16,7 +16,10 @@
         Load
         <form role="group">
           <input id="weight" oninput="index()" />
-          <button disabled>kg</button>
+          <select id="weightUnit" oninput="index()">
+            <option value="kg" selected>kg</option>
+            <option value="lb">lb</option>
+          </select>
         </form>
       </label>
 
@@ -29,7 +32,7 @@
           Powder
           <form role="group">
             <input id="powder" oninput="index()" placeholder="50" />
-            <button disabled>ml</button>
+            <button class="secondary" disabled>ml</button>
           </form>
         </label>
 
@@ -38,12 +41,12 @@
           <div class="grid">
             <form role="group">
               <input id="powderWeight" oninput="index()" placeholder="65" />
-              <button disabled>g</button>
+              <button class="secondary" disabled>g</button>
             </form>
 
             <form role="group">
               <input id="powderVolume" oninput="index()" placeholder="97" />
-              <button disabled>ml</button>
+              <button class="secondary" disabled>ml</button>
             </form>
           </div>
         </label>
@@ -54,7 +57,7 @@
             Minimum
             <form role="group">
               <input id="powderMinimumLoad" oninput="index()" placeholder="4" />
-              <button disabled>kg</button>
+              <button class="secondary" disabled>kg</button>
             </form>
           </label>
 
@@ -62,7 +65,7 @@
             Maximum
             <form role="group">
               <input id="powderMaximumLoad" oninput="index()" placeholder="6" />
-              <button disabled>kg</button>
+              <button class="secondary" disabled>kg</button>
             </form>
           </label>
         </div>
@@ -72,7 +75,7 @@
         Powder
         <form role="group">
           <input type="text" id="grams" readonly />
-          <button disabled>g</button>
+          <button class="secondary" disabled>g</button>
         </form>
       </label>
     </main>
