@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Index - OurGTA</title>
+
+    <script
+      src="https://unpkg.com/htmx.org@1.9.12"
+      integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2"
+      crossorigin="anonymous"
+    ></script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="icon" href="/favicon.png" />
+
+    <style>
+      :root {
+        --pico-font-family: "JetBrains Mono", monospace;
+      }
+
+      * {
+        font-variant-ligatures: none;
+      }
+    </style>
+  </head>
+  <body style="overflow-y: scroll">
+    <main class="container">
+      <div class="grid">
+        <a href="/" style="justify-self: center; align-self: center">
+          <h1>OurGTA</h1>
+        </a>
+        <form action="/find.html" role="search">
+          <input type="search" name="name" placeholder="Find" />
+          <input type="submit" value="Find" />
+        </form>
+      </div>
+
+      <div class="overflow-auto">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+            </tr>
+          </thead>
+          <tbody
+            hx-get="https://glassfrog.duckdns.org/htmx/active"
+            hx-trigger="load, every 1m"
+          >
+            <tr class="htmx-indicator">
+              <td>
+                <div class="grid" style="justify-items: center">
+                  <img
+                    src="https://github.com/egonelbre/gophers/blob/master/.thumb/animation/gopher-dance-long.gif?raw=true"
+                    alt=""
+                  />
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </body>
+</html>
