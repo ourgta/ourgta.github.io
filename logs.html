@@ -34,6 +34,16 @@
         font-variant-ligatures: none;
       }
 
+      #retryIndicator {
+        display: none;
+      }
+      .htmx-request#retryIndicator {
+        display: inline;
+      }
+      .htmx-request#retryIndicator ~ #retryButton {
+        display: none;
+      }
+
       #moreIndicator {
         display: none;
       }
@@ -73,18 +83,27 @@
               <th scope="col">Length</th>
             </tr>
           </thead>
-          <tbody
-            hx-get="https://glassfrog.duckdns.org/htmx/logs"
-            hx-trigger="load"
-            hx-vals="js:{ timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone, format: `${new Date(1136214245000).toLocaleDateString()} ${new Date(1136214245000).toLocaleTimeString()}` }"
-          >
-            <tr class="htmx-indicator">
+          <tbody id="replaceMe">
+            <tr>
               <td colspan="5">
                 <div class="grid" style="justify-items: center">
                   <img
                     src="https://github.com/egonelbre/gophers/blob/master/.thumb/animation/gopher-dance-long.gif?raw=true"
                     alt=""
+                    class="htmx-indicator"
+                    id="retryIndicator"
                   />
+                  <button
+                    hx-get="https://glassfrog.duckdns.org/htmx/logs"
+                    hx-trigger="load, click"
+                    hx-vals="js:{ timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone, format: `${new Date(1136214245000).toLocaleDateString()} ${new Date(1136214245000).toLocaleTimeString()}` }"
+                    hx-target="#replaceMe"
+                    hx-swap="outerHTML"
+                    hx-indicator="#retryIndicator"
+                    id="retryButton"
+                  >
+                    Retry
+                  </button>
                 </div>
               </td>
             </tr>

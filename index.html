@@ -33,6 +33,16 @@
       * {
         font-variant-ligatures: none;
       }
+
+      #retryIndicator {
+        display: none;
+      }
+      .htmx-request#retryIndicator {
+        display: inline;
+      }
+      .htmx-request#retryIndicator ~ #retryButton {
+        display: none;
+      }
     </style>
   </head>
   <body style="overflow-y: scroll">
@@ -54,17 +64,26 @@
               <th scope="col">Name</th>
             </tr>
           </thead>
-          <tbody
-            hx-get="https://glassfrog.duckdns.org/htmx/active"
-            hx-trigger="load, every 1m"
-          >
-            <tr class="htmx-indicator">
+          <tbody id="replaceMe">
+            <tr>
               <td>
                 <div class="grid" style="justify-items: center">
                   <img
                     src="https://github.com/egonelbre/gophers/blob/master/.thumb/animation/gopher-dance-long.gif?raw=true"
                     alt=""
+                    class="htmx-indicator"
+                    id="retryIndicator"
                   />
+                  <button
+                    hx-get="https://glassfrog.duckdns.org/htmx/active"
+                    hx-trigger="load, click"
+                    hx-target="#replaceMe"
+                    hx-swap="outerHTML"
+                    hx-indicator="#retryIndicator"
+                    id="retryButton"
+                  >
+                    Retry
+                  </button>
                 </div>
               </td>
             </tr>
