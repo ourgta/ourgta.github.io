@@ -75,7 +75,8 @@
                         if (
                           element
                             .querySelector("th")
-                            .textContent.startsWith(input.value)
+                            .textContent.toLowerCase()
+                            .startsWith(input.value.toLowerCase())
                         ) {
                           element.style.display = "";
                           continue;
