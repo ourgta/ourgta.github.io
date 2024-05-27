@@ -63,9 +63,34 @@
             <tr>
               <th scope="col">Name</th>
             </tr>
-          </thead>
-          <tbody id="replaceMe">
             <tr>
+              <th>
+                <input id="input" inputmode="numeric" placeholder="Filter" />
+                <script>
+                  document.addEventListener("DOMContentLoaded", () => {
+                    const input = document.getElementById("input");
+                    const tbody = document.getElementById("tbody");
+                    input.oninput = () => {
+                      for (const element of tbody.children) {
+                        if (
+                          element
+                            .querySelector("th")
+                            .textContent.startsWith(input.value)
+                        ) {
+                          element.style.display = "";
+                          continue;
+                        }
+
+                        element.style.display = "none";
+                      }
+                    };
+                  });
+                </script>
+              </th>
+            </tr>
+          </thead>
+          <tbody id="tbody">
+            <tr id="replaceMe">
               <td>
                 <div class="grid" style="justify-items: center">
                   <img
