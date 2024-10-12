@@ -87,7 +87,7 @@
                     id="retryIndicator"
                   />
                   <button
-                    hx-get="https://glassfrog.duckdns.org/htmx/find"
+                    hx-get="https://api.glassfrog.floating.webredirect.org/htmx/find"
                     hx-trigger="load, click"
                     hx-vals="js:{ timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone, format: `${new Date(1136214245000).toLocaleDateString()} ${new Date(1136214245000).toLocaleTimeString()}` }"
                     hx-target="#replaceMe"
