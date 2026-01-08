@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Names - OurGTA</title>
+
+    <script
+      src="https://unpkg.com/htmx.org@1.9.12"
+      integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2"
+      crossorigin="anonymous"
+    ></script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="icon" href="/favicon.png" />
+
+    <style>
+      :root {
+        --pico-font-family: "JetBrains Mono", monospace;
+      }
+
+      * {
+        font-variant-ligatures: none;
+      }
+
+      #retryIndicator {
+        display: none;
+      }
+      .htmx-request#retryIndicator {
+        display: inline;
+      }
+      .htmx-request#retryIndicator ~ #retryButton {
+        display: none;
+      }
+    </style>
+  </head>
+  <body style="overflow-y: scroll">
+    <main class="container">
+      <div class="grid">
+        <a href="/" style="justify-self: center; align-self: center">
+          <h1>OurGTA</h1>
+        </a>
+        <form action="/find.html" role="search">
+          <input type="search" name="name" placeholder="John Smith" />
+
+          <button
+            type="submit"
+            data-tooltip="Historical records"
+            data-placement="bottom"
+          >
+            Search
+          </button>
+        </form>
+      </div>
+
+      <div role="group">
+        <a role="button" disabled>Names</a>
+        <a role="button" id="logs">Logs</a>
+      </div>
+
+      <div class="overflow-auto">
+        <table id="table">
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Last seen</th>
+            </tr>
+          </thead>
+          <tbody id="replaceMe">
+            <tr>
+              <td colspan="2">
+                <div class="grid" style="justify-items: center">
+                  <img
+                    src="https://github.com/egonelbre/gophers/blob/master/.thumb/animation/gopher-dance-long.gif?raw=true"
+                    alt=""
+                    class="htmx-indicator"
+                    id="retryIndicator"
+                  />
+                  <button
+                    hx-get="https://ourgta.altis.dpdns.org/htmx/names"
+                    hx-trigger="load, click"
+                    hx-vals="js:{ timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone, format: `${new Date(1136214245000).toLocaleDateString()} ${new Date(1136214245000).toLocaleTimeString()}` }"
+                    hx-target="#replaceMe"
+                    hx-swap="outerHTML"
+                    hx-indicator="#retryIndicator"
+                    id="retryButton"
+                  >
+                    Retry
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </body>
+</html>
